@@ -39,8 +39,16 @@ export default {
         })
       }
     },
-    deleteChar() {
-
+    deleteChar(id) {
+      for(let i=0; i<this.characters.length; i++) {
+        if(this.characters[i].id == id) {
+          this.characters.splice(i,1);
+        }
+      }
+            
+    },
+    randomizeStat() {
+      this.statValue = 3*(Math.ceil(Math.random()*6));
     }
 
   }
@@ -64,7 +72,7 @@ export default {
     <div>
       <label for="main-stat">{{ className(mainStat) }}</label>
       <input type="number" name="main-stat" id="main-stat" max="20" min="0" v-model="statValue">
-      <button @click="">Aléatoire</button>
+      <button @click="randomizeStat">Aléatoire</button>
     </div>
     <div>
       <button @click="addChar">Ajouter le personnage</button>
@@ -88,7 +96,7 @@ export default {
         <th>{{ character.class }}</th>
         <th>{{ character.mainStat }}</th>
         <th>{{ character.statValue }}</th>
-        <th><button>Supprimer</button></th>
+        <th><button @click="deleteChar(character.id)">Supprimer</button></th>
       </tr>
     </table>
   </section>
@@ -97,7 +105,11 @@ export default {
 <style scoped>
 #char-creation {
   display: flex;
+  align-items: center;
   gap: 10px;
+  background-color: red;
+  border-radius: 12px;
+  padding: 30px;
 }
 
 h1 {
