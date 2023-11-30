@@ -1,28 +1,39 @@
 <script>
 export default {
   name: 'charCreation',
-  props: {
-  },
   data() {
     return {
       characters: [],
-      mainStat: "mage",
+      charClass: "mage",
       charName: "",
       statValue: 10
 
     }
   },
   computed: {
-    className: ({mainStat}) => () => {
-      let className = "";
-      if(mainStat == "mage") {
-        className= "Intelligence"
+    mainStat: ({charClass}) => () => {
+      let mainStat = "";
+      if(charClass == "mage") {
+        mainStat= "Intelligence"
       }
-      if(mainStat == "warrior") {
-        className = "Force"
+      if(charClass == "warrior") {
+        mainStat = "Force"
       }
-      if(mainStat == "archer") {
-        className = "Dextérité"
+      if(charClass == "archer") {
+        mainStat = "Dextérité"
+      }
+      return mainStat;
+    },
+    className: ({charClass}) => () => {
+      let className = '';
+      if(charClass == "mage") {
+        className = "Magicien";
+      }
+      if(charClass == "warrior") {
+        className = "Guerrier"
+      }
+      if(charClass == "archer") {
+        className = "Archer"
       }
       return className;
     }
@@ -33,19 +44,22 @@ export default {
         this.characters.push({
           id: this.characters.length+1,
           name: this.charName,
-          class: this.mainStat,
-          mainStat : this.className(this.mainStat),
+          class: this.className(this.charClass),
+          mainStat : this.mainStat(this.charClass),
           statValue : this.statValue
         })
       }
+    },
+    editChar(id) {
+      
+
     },
     deleteChar(id) {
       for(let i=0; i<this.characters.length; i++) {
         if(this.characters[i].id == id) {
           this.characters.splice(i,1);
         }
-      }
-            
+      }      
     },
     randomizeStat() {
       this.statValue = 3*(Math.ceil(Math.random()*6));
@@ -63,22 +77,22 @@ export default {
     </div>
     <div>
       <label for="char-class">Classe du personnage</label>
-      <select v-model="mainStat" name="char-class" id="char-class">
+      <select v-model="charClass" name="char-class" id="char-class">
         <option value="mage">Magicien</option>
         <option value="warrior">Guerrier</option>
         <option value="archer">Archer</option>
       </select>
     </div>
     <div>
-      <label for="main-stat">{{ className(mainStat) }}</label>
+      <label for="main-stat">{{ mainStat(charClass) }}</label>
       <input type="number" name="main-stat" id="main-stat" max="20" min="0" v-model="statValue">
       <button @click="randomizeStat">Aléatoire</button>
     </div>
-    <div>
+    <div id="form-button">
       <button @click="addChar">Ajouter le personnage</button>
     </div>
   </section>
-
+  
   <section>
     <table>
       <tr>
@@ -89,14 +103,17 @@ export default {
         <th>Valeur stat</th>
         <th>Actions</th>
       </tr>
-
+      
       <tr v-for="character of characters">
-        <th>{{ character.id }}</th>
-        <th>{{ character.name }}</th>
-        <th>{{ character.class }}</th>
-        <th>{{ character.mainStat }}</th>
-        <th>{{ character.statValue }}</th>
-        <th><button @click="deleteChar(character.id)">Supprimer</button></th>
+        <td>{{ character.id }}</td>
+        <td>{{ character.name }}</td>
+        <td>{{ character.class }}</td>
+        <td>{{ character.mainStat }}</td>
+        <td>{{ character.statValue }}</td>
+        <td>
+          <button @click="deleteChar(character.id)">Supprimer</button>
+          <button @click="editChar">Éditer</button>
+        </td>
       </tr>
     </table>
   </section>
@@ -105,12 +122,28 @@ export default {
 <style scoped>
 #char-creation {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
   gap: 10px;
-  background-color: red;
+  background-color: rgba(255, 123, 0, 0.199);
   border-radius: 12px;
   padding: 30px;
 }
+
+#char-creation>div {
+  display: flex;
+  flex-direction:column;
+}
+
+#form-button {
+  align-self: center;
+}
+
+input {
+  margin-bottom: 5px;
+}
+
 
 h1 {
   font-weight: 500;
@@ -119,19 +152,31 @@ h1 {
   top: -10px;
 }
 
-h3 {
-  font-size: 1.2rem;
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+  
+}
+table, tr, th, td {
+  border: 1px solid rgba(255, 123, 0, 0.199);
 }
 
-.greetings h1,
-.greetings h3 {
+th, td {
+  padding: 5px;
   text-align: center;
 }
 
-@media (min-width: 1024px) {
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
-  }
+button {
+  border: 0;
+  border-radius: 3px;
+  background-color:  rgb(143, 72, 5);
+  padding: 7px 25px;
+  color: lightgrey;
+  cursor: pointer;
+}
+
+h3 {
+  font-size: 1.2rem;
 }
 </style>
