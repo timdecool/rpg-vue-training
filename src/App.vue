@@ -4,7 +4,7 @@ import charCreation from './components/charCreation.vue'
 
 <template>
   <main>
-    <char-creation bidule="bonjour"/>
+    <char-creation/>
   </main>
 </template>
 
