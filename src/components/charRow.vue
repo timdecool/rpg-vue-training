@@ -82,7 +82,7 @@ export default {
         </td>
 </template>
 
-<style>
+<style scoped>
 td {
   padding: 5px;
   text-align: center;

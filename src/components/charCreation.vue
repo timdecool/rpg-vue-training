@@ -69,11 +69,7 @@ export default {
 
     },
     deleteChar(id) {
-      for(let i=0; i<this.characters.length; i++) {
-        if(this.characters[i].id == id) {
-          this.characters.splice(i,1);
-        }
-      }      
+      this.characters = this.characters.filter((item) => item.id != id)
     },
     randomizeStat() {
       this.statValue = 3*(Math.ceil(Math.random()*6));
@@ -106,7 +102,6 @@ export default {
     </div>
   </section>
 
-  <p>{{ characters }}</p>
 
   <section>
     <table v-if="characters.length > 0">
@@ -119,12 +114,14 @@ export default {
         <th>Actions</th>
       </tr>
       
-      <tr v-for="character of characters">
+      <tr v-for="character of characters" :key="character.id">
         <char-row :character="character" @delete="deleteChar(character.id)" @edit="editChar"/>
       </tr>
     </table>
   </section>
+<pre>{{ characters }}</pre>
 </template>
+
 
 <style scoped>
 #char-creation {
